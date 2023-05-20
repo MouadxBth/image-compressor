@@ -1,0 +1,7 @@
+package-lock.json
+node_modules/
+build/
+backup/
+.env
+vercel.json
+LICENSE
