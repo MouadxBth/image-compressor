@@ -51,9 +51,6 @@ app.use(express.json({
 
 }));
 
-// Middleware for parsing URL-encoded data and limiting body size
-//app.use(express.urlencoded({ extended: true, limit: "20mb" }));
-
 /**
  * Handles the upload request to compress an image.
  * @param request The HTTP request object.

@@ -1,6 +1,6 @@
-# File Decompression API
+# Image Compression API
 
-This is an Express.js server application built using TypeScript that allows users to upload compressed files and receive an array of their contents as a JSON object.
+This is an Express.js server application built using TypeScript that allows users to upload image files and receive them back compressed in Base64 format.
 
 ## Prerequisites
 
@@ -12,13 +12,13 @@ This is an Express.js server application built using TypeScript that allows user
 1. Clone the repository:
 
 ```
-git clone https://github.com/MouadxBth/file-decompressor.git
+git clone https://github.com/MouadxBth/image-compressor.git
 ```
 
 2. Install dependencies:
 
 ```
-cd file-decompressor
+cd image-compressor
 npm install
 ```
 
@@ -33,39 +33,32 @@ Make sure to copy the ```.env.example``` file to ```.env``` and tailor it to fit
 npm run start
 ```
 
-5. The server is now running on http://localhost:{DECOMPRESSOR_PORT}.
+5. The server is now running on http://localhost:{COMPRESSOR_PORT}.
 
 ## Usage
 
-1. To decompress a file, send a POST request to the endpoint `http://localhost:{DECOMPRESSOR_PORT}/{DECOMPRESSOR_ROUTE}` with the file attached in a `multipart/form-data` format, the name of it's key should explicitly be as ```file```.
+1. To compress an image, send a POST request to the endpoint `http://localhost:{COMPRESSOR_PORT}/{COMPRESSOR_ROUTE}` with the image's content encoded in Base64 in the body in the following format:
 
-2. If the uploaded file is compressed, the server will decompress it and send back a JSON object with an array of decompressed files.
+```
+{
+    "fileName": "example", // the image's output name, this will be prefixed with the image's type
+    "quality": 50, // the quality reduced to
+    "fileContent": "image content in here" // the image's content in Base64 encoding
+}
+```
+
+2. The server will receive the sent body and attempt to compress the image using the given quality, if it succeeds it will send the compressed image's name with extension, content, size before, size after and the compression ration.
 
 > An example:
 
 ```
-[
-    {
-        "fileName": "file1.txt",
-        "fileContent": ""
+{
+    "fileData": {
+        "fileName": "test.jpeg",
+        "fileContent": "compressed image's content encoded in base64"
     },
-    {
-        "fileName": "file2.txt",
-        "fileContent": "emFkYXoK"
-    },
-    {
-        "fileName": "file3.txt",
-        "fileContent": "YXpkYXoK"
-    },
-    {
-        "fileName": "file4.txt",
-        "fileContent": "emFkYXoK"
-    },
-    {
-        "fileName": "file5.txt",
-        "fileContent": "ZHphZGF6ZAo="
-    }
-]
+    "sizeBefore": 2048000,
+    "sizeAfter": 204800,
+    "ratio": 1000.00
+}
 ```
-
-Note: The file contents are encrypted in Base64 format.
