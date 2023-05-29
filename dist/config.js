@@ -1,0 +1,17 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ERROR_COMPRESSION = exports.INVALID_COMPRESSION = exports.INVALID_AUTH_TOKEN = exports.EXPIRED_AUTH_TOKEN = exports.UNAUTHORIZED = exports.MISSING_AUTH_TOKEN = exports.INVALID_BODY = void 0;
+const INVALID_BODY = "Error! fileName, fileContent and quality are either missing or empty, or invalid quality number!";
+exports.INVALID_BODY = INVALID_BODY;
+const MISSING_AUTH_TOKEN = "Error! AuthorizationToken header is either missing or empty!";
+exports.MISSING_AUTH_TOKEN = MISSING_AUTH_TOKEN;
+const UNAUTHORIZED = "Error! You are not authorized to use this application!";
+exports.UNAUTHORIZED = UNAUTHORIZED;
+const EXPIRED_AUTH_TOKEN = "Error! Token has expired!";
+exports.EXPIRED_AUTH_TOKEN = EXPIRED_AUTH_TOKEN;
+const INVALID_AUTH_TOKEN = "Error! AuthorizationToken header is invalid, provide a valid JWT value!";
+exports.INVALID_AUTH_TOKEN = INVALID_AUTH_TOKEN;
+const INVALID_COMPRESSION = "Error! Invalid compression request!";
+exports.INVALID_COMPRESSION = INVALID_COMPRESSION;
+const ERROR_COMPRESSION = "Error! Unable to compress image!";
+exports.ERROR_COMPRESSION = ERROR_COMPRESSION;

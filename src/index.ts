@@ -2,6 +2,9 @@ require("dotenv").config();
 
 import express, { Request, Response } from "express";
 import { compressImage } from "./imageCompressor";
+import { authenticate } from "./authentication";
+import { extractCompressionRequest } from "./compressionRequest";
+import { ERROR_COMPRESSION, INVALID_COMPRESSION } from "./config";
 
 /**
  * The port number for the compressor server.
@@ -13,25 +16,6 @@ const COMPRESSOR_PORT: number = process.env.COMPRESSOR_PORT ? parseInt(process.e
  */
 const COMPRESSOR_ROUTE: string = process.env.COMPRESSOR_ROUTE || "/upload";
 
-
-/**
- * Formats the size in bytes to a human-readable format.
- * @param sizeInBytes The size in bytes.
- * @returns The formatted size string.
- */
-function formatSize(sizeInBytes: number): string {
-	const units = ['B', 'KB', 'MB', 'GB', 'TB'];
-	let size = sizeInBytes;
-	let unitIndex = 0;
-
-	while (size >= 1024 && unitIndex < units.length - 1) {
-		size /= 1024;
-		unitIndex++;
-	}
-
-	const roundedSize = Number(size.toFixed(2));
-	return `${roundedSize} ${units[unitIndex]}`;
-}
 
 const app = express();
 
@@ -58,36 +42,22 @@ app.use(express.json({
  */
 app.post(COMPRESSOR_ROUTE, async (request: Request, response: Response) => {
 
-	try {
-		const fileName: string | null = request.body['fileName'];
-		const fileContentString: string | null = request.body['fileContent'];
-		const quality: number | null = request.body['quality'];
+	if (!authenticate(request, response))
+		return;
 
-		if (fileName == null
-			|| fileContentString == null
-			|| quality == null
-			|| fileName.length == 0
-			|| fileContentString.length == 0
-			|| !Number.isInteger(quality)) {
-			return response.status(400).send("Error! fileName, fileContent and quality are either missing or empty, or invalid quality number!");
-		}
+	const compressionRequest = extractCompressionRequest(request, response);
 
-		compressImage({
-			fileName: request.body['fileName'],
-			fileContent: request.body['fileContent']
-		}, quality)
-			.then((result) => {
-				console.log(`\nimage: ${result.fileData.fileName}\nBefore: ${formatSize(result.sizeBefore)}\nAfter: ${formatSize(result.sizeAfter)}\nRatio: ${result.ratio}%\n`);
+	if (typeof compressionRequest === 'boolean')
+		return response.status(400).send(INVALID_COMPRESSION);
 
-				return response.send(result);
-			})
-			.catch((error: any) => {
-				return response.status(500).send((error as Error).message);
-			});
+	compressImage(compressionRequest).then(result => {
+		if (result === undefined)
+			return response.status(500).send(ERROR_COMPRESSION);
 
-	} catch (decompressionError) {
-		return response.status(500).send(decompressionError);
-	}
+		return response.send(result);
+	}).catch((error: any) => {
+		return response.status(500).send((error as Error).message);
+	});
 
 });
 
