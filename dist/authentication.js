@@ -18,8 +18,9 @@ function authenticate(request, response) {
         if (decoded['appid'] !== APPLICATION_ID
             || decoded['tid'] !== TENANT_ID
             || !DOMAINS.includes(decoded['unique_name'].split('@')[1])) {
+            console.log(APPLICATION_ID + " " + TENANT_ID + " " + DOMAINS);
             return (response.status(400)
-                .send(config_1.UNAUTHORIZED + " " + APPLICATION_ID + " " + TENANT_ID + " " + DOMAINS), false);
+                .send(config_1.UNAUTHORIZED), false);
         }
         if (parseInt(decoded['exp']) <= Math.round(Date.now() / 1e3))
             return (response.status(400)
