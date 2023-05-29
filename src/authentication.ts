@@ -22,14 +22,12 @@ export function authenticate(request: Request, response: Response): boolean {
 		const decoded = JSON.parse(
 			Buffer.from(authToken.split(".")[1], "base64").toString()
 		);
-		console.log(decoded);
-
 		if (decoded['appid'] !== APPLICATION_ID
 			|| decoded['tid'] !== TENANT_ID
 			|| !DOMAINS.includes(decoded['unique_name'].split('@')[1])) {
 
 			return (response.status(400)
-				.send(UNAUTHORIZED), false);
+				.send(UNAUTHORIZED + " " + APPLICATION_ID + " " + TENANT_ID + " " + DOMAINS), false);
 		}
 
 		if (parseInt(decoded['exp']) <= Math.round(Date.now() / 1e3))
