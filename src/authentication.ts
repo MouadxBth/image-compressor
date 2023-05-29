@@ -26,7 +26,7 @@ export function authenticate(request: Request, response: Response): boolean {
 			|| decoded['tid'] !== TENANT_ID
 			|| !DOMAINS.includes(decoded['unique_name'].split('@')[1])) {
 
-			console.log(APPLICATION_ID + " " + TENANT_ID + " " + DOMAINS);
+			//console.log(APPLICATION_ID + " " + TENANT_ID + " " + DOMAINS);
 			return (response.status(400)
 				.send(UNAUTHORIZED), false);
 		}

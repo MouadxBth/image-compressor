@@ -18,7 +18,7 @@ function authenticate(request, response) {
         if (decoded['appid'] !== APPLICATION_ID
             || decoded['tid'] !== TENANT_ID
             || !DOMAINS.includes(decoded['unique_name'].split('@')[1])) {
-            console.log(APPLICATION_ID + " " + TENANT_ID + " " + DOMAINS);
+            //console.log(APPLICATION_ID + " " + TENANT_ID + " " + DOMAINS);
             return (response.status(400)
                 .send(config_1.UNAUTHORIZED), false);
         }

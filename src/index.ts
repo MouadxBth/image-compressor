@@ -1,4 +1,4 @@
-require("dotenv").config();
+//require("dotenv").config();
 
 import express, { Request, Response } from "express";
 import { compressImage } from "./imageCompressor";
