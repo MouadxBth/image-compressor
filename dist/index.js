@@ -51,7 +51,7 @@ app.post(COMPRESSOR_ROUTE, (request, response) => __awaiter(void 0, void 0, void
         return;
     const compressionRequest = (0, compressionRequest_1.extractCompressionRequest)(request, response);
     if (typeof compressionRequest === 'boolean')
-        return response.status(400).send(config_1.INVALID_COMPRESSION);
+        return;
     (0, imageCompressor_1.compressImage)(compressionRequest).then(result => {
         if (result === undefined)
             return response.status(500).send(config_1.ERROR_COMPRESSION);
