@@ -1,10 +1,10 @@
-//require("dotenv").config();
+require("dotenv").config();
 
 import express, { Request, Response } from "express";
 import { compressImage } from "./imageCompressor";
 import { authenticate } from "./authentication";
 import { extractCompressionRequest } from "./compressionRequest";
-import { ERROR_COMPRESSION, INVALID_COMPRESSION } from "./config";
+import { ERROR_COMPRESSION } from "./config";
 
 /**
  * The port number for the compressor server.
@@ -42,8 +42,8 @@ app.use(express.json({
  */
 app.post(COMPRESSOR_ROUTE, async (request: Request, response: Response) => {
 
-	if (!authenticate(request, response))
-		return;
+	/* if (!authenticate(request, response))
+		return; */
 
 	const compressionRequest = extractCompressionRequest(request, response);
 
